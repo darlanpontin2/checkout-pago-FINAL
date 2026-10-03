@@ -1,0 +1,81 @@
+spring:
+  datasource:
+    url: ${CHECKOUT_DATABASE_URL}
+    username: ${CHECKOUT_DATABASE_USER}
+    password: ${CHECKOUT_DATABASE_PASSWORD}
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  mail:
+    host: ${CHECKOUT_SMTP_HOST}
+    port: ${CHECKOUT_SMTP_PORT:587}
+    username: ${CHECKOUT_SMTP_USER}
+    password: ${CHECKOUT_SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            checkserveridentity: true
+          connectiontimeout: 5000
+          timeout: 10000
+          writetimeout: 10000
+server:
+  port: 8443
+  forward-headers-strategy: NONE
+  ssl:
+    enabled: true
+    key-store: ${CHECKOUT_TLS_KEYSTORE}
+    key-store-password: ${CHECKOUT_TLS_PASSWORD}
+    key-store-type: PKCS12
+    enabled-protocols: TLSv1.2,TLSv1.3
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+logging:
+  level:
+    org.hibernate.SQL: OFF
+    org.hibernate.orm.jdbc.bind: OFF
+    org.springframework.web: WARN
+checkout:
+  security:
+    issuer: ${CHECKOUT_JWT_ISSUER}
+    jwk-set-uri: ${CHECKOUT_JWT_JWKS_URI}
+    audience: ${CHECKOUT_JWT_AUDIENCE}
+    allowed-origins: ${CHECKOUT_ALLOWED_ORIGINS}
+  crypto:
+    active-key: ${CHECKOUT_ACTIVE_KEY_ID}
+    keys: ${CHECKOUT_ENCRYPTION_KEYS_JSON}
+    hmac-key: ${CHECKOUT_HMAC_KEY}
+  gateway:
+    access-token: ${CHECKOUT_MP_ACCESS_TOKEN}
+    collector-id: ${CHECKOUT_MP_COLLECTOR_ID}
+    webhook-secret: ${CHECKOUT_MP_WEBHOOK_SECRET}
+  privacy:
+    policy-version: ${CHECKOUT_POLICY_VERSION}
+    order-retention-days: ${CHECKOUT_ORDER_RETENTION_DAYS}
+    cleanup-ms: 3600000
+  shipping:
+    zone: America/Sao_Paulo
+    holidays: ${CHECKOUT_SHIPPING_HOLIDAYS:}
+  fraud:
+    threshold: ${CHECKOUT_FRAUD_THRESHOLD:8}
+    high-value: ${CHECKOUT_FRAUD_HIGH_VALUE:5000.00}
+    blocked-countries: ${CHECKOUT_FRAUD_BLOCKED_COUNTRIES:}
+  email:
+    from: ${CHECKOUT_EMAIL_FROM}
+  worker:
+    delay-ms: 2000
+    reconcile-ms: 60000
+    cleanup-ms: 3600000

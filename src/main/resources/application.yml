@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    default: checkout
+  jpa:
+    hibernate:
+      ddl-auto: none
